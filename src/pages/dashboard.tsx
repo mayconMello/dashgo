@@ -1,6 +1,95 @@
-import { Flex, SimpleGrid } from "@chakra-ui/react";
+import { ApexOptions } from 'apexcharts'
+import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
+
+const Chart = dynamic(() => import('react-apexcharts'), {
+  ssr: false
+})
+
+
+const options: ApexOptions = {
+  chart: {
+    toolbar: {
+      show: false
+    },
+    foreColor: theme.colors.gray[500],
+  },
+  grid: {
+    show: false
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    enabled: false
+  },
+  xaxis: {
+    type: "datetime",
+    axisBorder: {
+      color: theme.colors.gray[600]
+    },
+    axisTicks: {
+      color: theme.colors.gray[600]
+    },
+    categories: [
+      new Date('2022-03-18').getTime(),
+      new Date('2022-03-19').getTime(),
+      new Date('2022-03-20').getTime(),
+      new Date('2022-03-21').getTime(),
+      new Date('2022-03-22').getTime(),
+      new Date('2022-03-23').getTime(),
+      new Date('2022-03-24').getTime(),
+    ]
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'dark',
+      opacityFrom: 0.7,
+      opacityTo: 0.3
+    }
+  },
+};
+
+const series = [
+  {
+    name: 'series1',
+    data: [31, 120, 10, 28, 61, 18, 109]
+    // data: [
+    //   {
+    //     x: new Date('2021-03-18').getTime(),
+    //     y: 31
+    //   },
+    //   {
+    //     x: new Date('2021-03-19').getTime(),
+    //     y: 120
+    //   },
+    //   {
+    //     x: new Date('2021-03-20').getTime(),
+    //     y: 10
+    //   },
+    //   {
+    //     x: new Date('2021-03-21').getTime(),
+    //     y: 28
+    //   },
+    //   {
+    //     x: new Date('2021-03-22').getTime(),
+    //     y: 61
+    //   },
+    //   {
+    //     x: new Date('2021-03-23').getTime(),
+    //     y: 18
+    //   },
+    //   {
+    //     x: new Date('2021-03-24').getTime(),
+    //     y: 109
+    //   },
+
+    // ]
+  }
+];
 
 export default function Dashboard() {
   return (
@@ -15,8 +104,47 @@ export default function Dashboard() {
       >
         <Sidebar />
 
-        <SimpleGrid>
+        <SimpleGrid
+          flex="1"
+          gap="4"
+          minChildWidth="320px"
+          alignItems="flex-start"
+        >
+          <Box
+            p={["6", "8"]}
+            bg="gray.800"
+            borderRadius={8}
+            pb="4"
+          >
+            <Text
+              fontSize="lg"
+              mb="4"
+            >Inscritos da semana</Text>
+            <Chart
+              options={options}
+              series={series}
+              type="area"
+              height={160}
+            />
+          </Box>
 
+          <Box
+            p={["6", "8"]}
+            bg="gray.800"
+            borderRadius={8}
+            pb="4"
+          >
+            <Text
+              fontSize="lg"
+              mb="4"
+            >Taxa de abertura</Text>
+            <Chart
+              options={options}
+              series={series}
+              type="area"
+              height={160}
+            />
+          </Box>
         </SimpleGrid>
       </Flex>
     </Flex>
