@@ -25,9 +25,11 @@ export function Pagination({
   onPageChange
 }: PaginationProps) {
 
-  const lasPage = Math.floor(
+  const lasPage = Math.ceil(
     totalCountOfRegisters / registerPerPage
   )
+
+  console.log(lasPage)
 
   const previousPages = currentPage > 1
     ? generatePagesArray(
@@ -91,14 +93,15 @@ export function Pagination({
           />
         })}
 
-        {currentPage > (1 + siblingsCount) && (
+        {(currentPage + siblingsCount) < lasPage && (
           <>
-            {currentPage + 1 + siblingsCount < (lasPage)
+            {(currentPage + 1 + siblingsCount) < lasPage
               && <Text
                 color="gray.300"
                 width="8"
                 textAlign="center"
-              >...</Text>}
+              >...</Text>
+            }
             <PaginationItem
               onPageChange={onPageChange}
               number={lasPage}

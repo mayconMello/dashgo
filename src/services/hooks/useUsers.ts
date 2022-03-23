@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { api } from "../api";
 
 type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
   createdAt: string;
@@ -20,14 +20,14 @@ export async function getUsers(page: number): Promise<GetUsersReponse> {
     }
   })
 
-  const totalCount = Number(headers['x-total-counts'])
+  const totalCount = Number(headers['x-total-count'])
 
   const users = data.users.map(user => {
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      createdAt: new Date(user.createdAt).toLocaleDateString()
+      createdAt: new Date(user.created_at).toLocaleDateString()
     }
   });
 
@@ -38,7 +38,7 @@ export async function getUsers(page: number): Promise<GetUsersReponse> {
 }
 
 export function useUsers(page: number) {
-  return useQuery('users', () => getUsers(page), {
-    staleTime: 1000 * 5 // 5 seconds
+  return useQuery(['users', page], () => getUsers(page), {
+    staleTime: 1000 * 60 * 10 // 10 minutes
   })
 }
